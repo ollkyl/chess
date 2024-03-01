@@ -26,7 +26,5 @@ while running:
     pygame.display.update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            event.quit()
+            pygame.quit()
             running = False
-
-# fkgrp,g
