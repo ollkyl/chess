@@ -2,7 +2,6 @@ import pygame
 from chess_graphics import board
 from chess_logic import Common, Pawn, Knight, Bishop, Rook, Queen, King
 
-
 pygame.init()
 
 

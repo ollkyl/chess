@@ -10,6 +10,7 @@ class Common:
         self.new_coordinate_x = None
         self.new_coordinate_y = None
         self.mat = 0
+        self.image = image
 
     def cheking_position(self, new_coordinate_x, new_coordinate_y):  # проверка выхода за границы доски
         if not (0 <= new_coordinate_y <= 7) and not (0 <= new_coordinate_x <= 7):
