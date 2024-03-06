@@ -3,7 +3,7 @@ import pygame
 pygame.init()
 
 
-class Common:
+class Chess_piece:
     def __init__(self, piece, color, coordinate_x, coordinate_y):
         self.piece = piece
         self.color = color
@@ -42,7 +42,7 @@ class Common:
         return True
 
 
-class Pawn(Common):  # пешка
+class Pawn(Chess_piece):  # пешка
     def move(self, new_coordinate_x, new_coordinate_y):
         print("Inside Pawn move method")
         self.new_coordinate_x = new_coordinate_x
@@ -75,7 +75,7 @@ class Pawn(Common):  # пешка
             return False
 
 
-class Knight(Common):  # конь
+class Knight(Chess_piece):  # конь
     def move(self, new_coordinate_x, new_coordinate_y):
         print("Inside Knight move method")
         self.new_coordinate_x = new_coordinate_x
@@ -94,7 +94,7 @@ class Knight(Common):  # конь
                 return False
 
 
-class Bishop(Common):  # слон
+class Bishop(Chess_piece):  # слон
     def move(self, new_coordinate_x, new_coordinate_y):
         print("Inside Bishop move method")
         self.new_coordinate_x = new_coordinate_x
@@ -113,7 +113,7 @@ class Bishop(Common):  # слон
             return False
 
 
-class Rook(Common):  # ладья
+class Rook(Chess_piece):  # ладья
     def move(self, new_coordinate_x, new_coordinate_y):
         print("Inside Rook move method")
         self.new_coordinate_x = new_coordinate_x
@@ -148,7 +148,7 @@ class Rook(Common):  # ладья
             return False
 
 
-class Queen(Common):
+class Queen(Chess_piece):
     def move(self, new_coordinate_x, new_coordinate_y):
         print("Inside Queen move method")
         self.new_coordinate_x = new_coordinate_x
@@ -182,7 +182,7 @@ class Queen(Common):
             return False
 
 
-class King(Common):
+class King(Chess_piece):
     def move(self, new_coordinate_x, new_coordinate_y):
         print("Inside King move method")
         self.new_coordinate_x = new_coordinate_x
@@ -198,43 +198,43 @@ class King(Common):
             return False
         
 
-chess_board = [[Common('____', '____', -1, -1) for _ in range(8)] for _ in range(8)]
+chess_board = [[Chess_piece('____', '____', -1, -1) for _ in range(8)] for _ in range(8)]
 
 
-class Game(Common):
+class Game(Chess_piece):
     @staticmethod
     def start_game(new_coordinate_x, new_coordinate_y, coordinate_x, coordinate_y):
         now_piece = chess_board[coordinate_x][coordinate_y]
         if isinstance(now_piece, Pawn):
             if now_piece.move(new_coordinate_x, new_coordinate_y):
                 chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                chess_board[coordinate_x][coordinate_y] = Common('____', '____', coordinate_x,
-                                                                 coordinate_y, None)
+                chess_board[coordinate_x][coordinate_y] = Chess_piece('____', '____', coordinate_x,
+                                                                 coordinate_y)
         elif isinstance(now_piece, Knight):
             if now_piece.move(new_coordinate_x, new_coordinate_y):
                 chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                chess_board[coordinate_x][coordinate_y] = Common('____', '____', coordinate_x,
-                                                                 coordinate_y, None)
+                chess_board[coordinate_x][coordinate_y] = Chess_piece('____', '____', coordinate_x,
+                                                                 coordinate_y)
         elif isinstance(now_piece, Bishop):
             if now_piece.move(new_coordinate_x, new_coordinate_y):
                 chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                chess_board[coordinate_x][coordinate_y] = Common('____', '____', coordinate_x,
-                                                                 coordinate_y, None)
+                chess_board[coordinate_x][coordinate_y] = Chess_piece('____', '____', coordinate_x,
+                                                                 coordinate_y)
         elif isinstance(now_piece, Rook):
             if now_piece.move(new_coordinate_x, new_coordinate_y):
                 chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                chess_board[coordinate_x][coordinate_y] = Common('____', '____', coordinate_x,
-                                                                 coordinate_y, None)
+                chess_board[coordinate_x][coordinate_y] = Chess_piece('____', '____', coordinate_x,
+                                                                 coordinate_y)
         elif isinstance(now_piece, Queen):
             if now_piece.move(new_coordinate_x, new_coordinate_y):
                 chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                chess_board[coordinate_x][coordinate_y] = Common('____', '____', coordinate_x,
-                                                                 coordinate_y, None)
+                chess_board[coordinate_x][coordinate_y] = Chess_piece('____', '____', coordinate_x,
+                                                                 coordinate_y)
         elif isinstance(now_piece, King):
             if now_piece.move(new_coordinate_x, new_coordinate_y):
                 chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                chess_board[coordinate_x][coordinate_y] = Common('____', '____', coordinate_x,
-                                                                 coordinate_y, None)
+                chess_board[coordinate_x][coordinate_y] = Chess_piece('____', '____', coordinate_x,
+                                                                 coordinate_y)
         else:
             print("Not find")
 
@@ -271,8 +271,9 @@ def board():
         elif isinstance(figure, Queen):
                 screen.blit(black_queen_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, King):
-                screen.blit(black_king_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))        
-        
+                screen.blit(black_king_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))  
+
+    pygame.display.update()    
 
 
 
@@ -356,9 +357,11 @@ for figure in white_figures:
 for figure in black_figures:
     chess_board[figure.coordinate_x][figure.coordinate_y] = figure
 
-    running = True
+running = True
 board()
 pygame.display.update()
+
+
 while running:
     board()
     pygame.display.update()
@@ -366,3 +369,15 @@ while running:
         if event.type == pygame.QUIT:
             pygame.quit()
             running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+    #  ввод координат
+                print("Ввод")
+                now_coordinate_x, now_coordinate_y = map(int, input().split())
+                next_coordinate_x, next_coordinate_y = map(int, input().split())
+                now_piece = Game(next_coordinate_x, next_coordinate_y, now_coordinate_x, now_coordinate_y)
+                now_piece.start_game(next_coordinate_x, next_coordinate_y, now_coordinate_x, now_coordinate_y)
+                end_of_game = now_piece.mat
+
+
+print("Game Over")       
