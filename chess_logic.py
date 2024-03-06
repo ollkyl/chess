@@ -259,6 +259,19 @@ def board():
                 screen.blit(white_queen_image, (figure.coordinate_x * square, figure.coordinate_y * square))
         elif isinstance(figure, King):
                 screen.blit(white_king_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+    for figure in black_figures:     
+        if isinstance(figure, Pawn):
+            screen.blit(black_pawn_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+        elif isinstance(figure, Rook):
+                screen.blit(black_rook_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+        elif isinstance(figure, Knight):
+                screen.blit(black_knight_image, (figure.coordinate_x * square + 20, figure.coordinate_y * square + 20))
+        elif isinstance(figure, Bishop):
+                screen.blit(black_bishop_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+        elif isinstance(figure, Queen):
+                screen.blit(black_queen_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+        elif isinstance(figure, King):
+                screen.blit(black_king_image, (figure.coordinate_x * square, figure.coordinate_y * square))        
         
 
 
