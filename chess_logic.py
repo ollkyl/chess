@@ -243,35 +243,35 @@ def board():
     for i in range(8):
         for j in range(8):
             if (i + j) % 2 == 0:
-                pygame.draw.rect(screen, black, (i * square, j * square, square, square))
-            else:
                 pygame.draw.rect(screen, white, (i * square, j * square, square, square))
+            else:
+                pygame.draw.rect(screen, black, (i * square, j * square, square, square))
     for figure in white_figures:               
         if isinstance(figure, Pawn):
-            screen.blit(white_pawn_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+            screen.blit(white_pawn_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Rook):
-                screen.blit(white_rook_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+                screen.blit(white_rook_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Knight):
-                screen.blit(white_knight_image, (figure.coordinate_x * square + 20, figure.coordinate_y * square + 20))
+                screen.blit(white_knight_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Bishop):
-                screen.blit(white_bishop_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+                screen.blit(white_bishop_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Queen):
-                screen.blit(white_queen_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+                screen.blit(white_queen_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, King):
-                screen.blit(white_king_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+                screen.blit(white_king_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
     for figure in black_figures:     
         if isinstance(figure, Pawn):
-            screen.blit(black_pawn_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+            screen.blit(black_pawn_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Rook):
-                screen.blit(black_rook_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+                screen.blit(black_rook_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Knight):
-                screen.blit(black_knight_image, (figure.coordinate_x * square + 20, figure.coordinate_y * square + 20))
+                screen.blit(black_knight_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Bishop):
-                screen.blit(black_bishop_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+                screen.blit(black_bishop_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Queen):
-                screen.blit(black_queen_image, (figure.coordinate_x * square, figure.coordinate_y * square))
+                screen.blit(black_queen_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, King):
-                screen.blit(black_king_image, (figure.coordinate_x * square, figure.coordinate_y * square))        
+                screen.blit(black_king_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))        
         
 
 
@@ -284,9 +284,9 @@ pygame.display.set_caption("Chess by Ollkyl")
 icon = pygame.image.load("images/chess_icon.png")
 pygame.display.set_icon(icon)
 screen.fill((143, 109, 88))
-black = (255, 255, 255)
-white = (50, 50, 50)
-square = 80
+white = (255, 255, 255)
+black = (109, 70, 166)
+square = 100
 
 white_pawn_image = pygame.image.load("images/pawn white.png")
 black_pawn_image = pygame.image.load("images/pawn black.png")
