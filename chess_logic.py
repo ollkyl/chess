@@ -1,24 +1,26 @@
 import pygame
 
+
 pygame.init()
 
 
 class Chess_piece:
-    def __init__(self, piece, color, coordinate_x, coordinate_y):
+    def __init__(self, piece, color, coordinate_x, coordinate_y, image):
         self.piece = piece
         self.color = color
         self.coordinate_x = coordinate_x
         self.coordinate_y = coordinate_y
+        self.image = image 
         self.new_coordinate_x = None
         self.new_coordinate_y = None
         self.mat = 0
      
     def cheking_position(self, new_coordinate_x, new_coordinate_y):  # проверка выхода за границы доски
         if not (0 <= new_coordinate_y <= 7) and not (0 <= new_coordinate_x <= 7):
-            print("False  cheking_position 1")
+            print("False  cheking_position (0 <=  <= 7)")
             return False
         elif chess_board[new_coordinate_x][new_coordinate_y].color == self.color:
-            print("False  cheking_position 3")
+            print("False  cheking_position color")
             return False
         elif chess_board[new_coordinate_x][new_coordinate_y].piece == "king":
             print("MAT")
@@ -29,11 +31,11 @@ class Chess_piece:
 
     @staticmethod
     #  препятствия на пути
-    def way(coordinate_x, coordinate_y, new_coordinate_x, new_coordinate_, direction_x, direction_y):
+    def way(coordinate_x, coordinate_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
         way_x = coordinate_x
         way_y = coordinate_y
-        while (way_x != new_coordinate_x) and (way_y != new_coordinate_):
-            if chess_board[way_x + direction_x][way_y + direction_y] == "____":
+        while (way_x != new_coordinate_x) or (way_y != new_coordinate_y):
+            if chess_board[way_x + direction_x][way_y + direction_y].piece == "_":
                 way_x += direction_x
                 way_y += direction_y
             else:
@@ -62,7 +64,7 @@ class Pawn(Chess_piece):  # пешка
             self.coordinate_y = new_coordinate_y
             return True
         # проверка на направление и пустую клетку
-        elif (new_coordinate_y - self.coordinate_y == direction) and (chess_board[new_coordinate_x][new_coordinate_y].piece == "____"):
+        elif (new_coordinate_y - self.coordinate_y == direction) and (chess_board[new_coordinate_x][new_coordinate_y].piece == "_"):
             self.coordinate_x = new_coordinate_x
             self.coordinate_y = new_coordinate_y
             return True
@@ -99,8 +101,8 @@ class Bishop(Chess_piece):  # слон
         print("Inside Bishop move method")
         self.new_coordinate_x = new_coordinate_x
         self.new_coordinate_y = new_coordinate_y
-        direction_x = new_coordinate_x - self.coordinate_x
-        direction_y = new_coordinate_y - self.coordinate_y
+        direction_x = int((new_coordinate_x - self.coordinate_x) / abs(new_coordinate_x - self.coordinate_x))
+        direction_y = int((new_coordinate_y - self.coordinate_y) / abs(new_coordinate_x - self.coordinate_x))
         if self.cheking_position(new_coordinate_x, new_coordinate_y):
             # проверка движения по диагонали
             if abs(new_coordinate_x - self.coordinate_x) == abs(new_coordinate_y - self.coordinate_y):
@@ -120,11 +122,14 @@ class Rook(Chess_piece):  # ладья
         self.new_coordinate_y = new_coordinate_y
         direction_x = new_coordinate_x - self.coordinate_x
         direction_y = new_coordinate_y - self.coordinate_y
+        if direction_x == 0:
+            direction_y = int(direction_y / abs(direction_y))
+        else:
+            direction_x = int(direction_x / abs(direction_x))
         if self.cheking_position(new_coordinate_x, new_coordinate_y):
             # проверка на движение только по вертикали
             if (new_coordinate_x - self.coordinate_x == 0) and (new_coordinate_y - self.coordinate_y != 0):
-                if self.way(self.coordinate_x, self.coordinate_y, new_coordinate_x, new_coordinate_y, direction_x,
-                            direction_y):
+                if self.way(self.coordinate_x, self.coordinate_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
                     self.coordinate_x = new_coordinate_x
                     self.coordinate_y = new_coordinate_y
                     return True
@@ -132,8 +137,7 @@ class Rook(Chess_piece):  # ладья
                     return False
             # проверка на движение только по горизонтали
             elif (new_coordinate_x - self.coordinate_x != 0) and (new_coordinate_y - self.coordinate_y == 0):
-                if self.way(self.coordinate_x, self.coordinate_y, new_coordinate_x, new_coordinate_y, direction_x,
-                            direction_y):
+                if self.way(self.coordinate_x, self.coordinate_y, new_coordinate_x, new_coordinate_y, direction_x,  direction_y):
                     self.coordinate_x = new_coordinate_x
                     self.coordinate_y = new_coordinate_y
                     return True
@@ -198,45 +202,7 @@ class King(Chess_piece):
             return False
         
 
-chess_board = [[Chess_piece('____', '____', -1, -1) for _ in range(8)] for _ in range(8)]
-
-
-class Game(Chess_piece):
-    @staticmethod
-    def start_game(new_coordinate_x, new_coordinate_y, coordinate_x, coordinate_y):
-        now_piece = chess_board[coordinate_x][coordinate_y]
-        if isinstance(now_piece, Pawn):
-            if now_piece.move(new_coordinate_x, new_coordinate_y):
-                chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                chess_board[coordinate_x][coordinate_y] = Chess_piece('____', '____', coordinate_x,
-                                                                 coordinate_y)
-        elif isinstance(now_piece, Knight):
-            if now_piece.move(new_coordinate_x, new_coordinate_y):
-                chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                chess_board[coordinate_x][coordinate_y] = Chess_piece('____', '____', coordinate_x,
-                                                                 coordinate_y)
-        elif isinstance(now_piece, Bishop):
-            if now_piece.move(new_coordinate_x, new_coordinate_y):
-                chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                chess_board[coordinate_x][coordinate_y] = Chess_piece('____', '____', coordinate_x,
-                                                                 coordinate_y)
-        elif isinstance(now_piece, Rook):
-            if now_piece.move(new_coordinate_x, new_coordinate_y):
-                chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                chess_board[coordinate_x][coordinate_y] = Chess_piece('____', '____', coordinate_x,
-                                                                 coordinate_y)
-        elif isinstance(now_piece, Queen):
-            if now_piece.move(new_coordinate_x, new_coordinate_y):
-                chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                chess_board[coordinate_x][coordinate_y] = Chess_piece('____', '____', coordinate_x,
-                                                                 coordinate_y)
-        elif isinstance(now_piece, King):
-            if now_piece.move(new_coordinate_x, new_coordinate_y):
-                chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                chess_board[coordinate_x][coordinate_y] = Chess_piece('____', '____', coordinate_x,
-                                                                 coordinate_y)
-        else:
-            print("Not find")
+chess_board = [[Chess_piece('_', '_', -1, -1, None) for _ in range(8)] for _ in range(8)]
 
 
 def board():
@@ -248,33 +214,38 @@ def board():
                 pygame.draw.rect(screen, black, (i * square, j * square, square, square))
     for figure in white_figures:               
         if isinstance(figure, Pawn):
-            screen.blit(white_pawn_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
+            screen.blit(figure.image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Rook):
-                screen.blit(white_rook_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
+                screen.blit(figure.image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Knight):
-                screen.blit(white_knight_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
+                screen.blit(figure.image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Bishop):
-                screen.blit(white_bishop_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
+                screen.blit(figure.image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Queen):
-                screen.blit(white_queen_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
+                screen.blit(figure.image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, King):
-                screen.blit(white_king_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
+                screen.blit(figure.image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
     for figure in black_figures:     
         if isinstance(figure, Pawn):
-            screen.blit(black_pawn_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
+            screen.blit(figure.image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Rook):
-                screen.blit(black_rook_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
+                screen.blit(figure.image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Knight):
-                screen.blit(black_knight_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
+                screen.blit(figure.image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Bishop):
-                screen.blit(black_bishop_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
+                screen.blit(figure.image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, Queen):
-                screen.blit(black_queen_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
+                screen.blit(figure.image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))
         elif isinstance(figure, King):
-                screen.blit(black_king_image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))  
+                screen.blit(figure.image, (figure.coordinate_x * square + 16, figure.coordinate_y * square + 16))  
 
     pygame.display.update()    
 
+
+def get_cell(x, y):
+    row = x / 100
+    col = y / 100
+    return row, col
 
 
 end_of_game = 0
@@ -303,39 +274,39 @@ white_king_image = pygame.image.load("images/king white.png")
 black_king_image = pygame.image.load("images/king black.png")
 
 
-pawn_1_pos_white = Pawn("pawn", "white", 0, 1)
-pawn_2_pos_white = Pawn("pawn", "white", 1, 1)
-pawn_3_pos_white = Pawn("pawn", "white", 2, 1)
-pawn_4_pos_white = Pawn("pawn", "white", 3, 1)
-pawn_5_pos_white = Pawn("pawn", "white", 4, 1)
-pawn_6_pos_white = Pawn("pawn", "white", 5, 1)
-pawn_7_pos_white = Pawn("pawn", "white", 6, 1)
-pawn_8_pos_white = Pawn("pawn", "white", 7, 1)
-knight_1_pos_white = Knight("knight", "white", 1, 0)
-knight_2_pos_white = Knight("knight", "white", 6, 0)
-bishop_1_pos_white = Bishop("bishop", "white", 2, 0)
-bishop_2_pos_white = Bishop("bishop", "white", 5, 0)
-rook_1_pos_white = Rook("rook", "white", 0, 0)
-rook_2_pos_white = Rook("rook", "white", 7, 0)
-queen_pos_white = Queen("queen", "white", 3, 0)
-king_pos_white = King("king", "white", 4, 0)
+pawn_1_pos_white = Pawn("pawn", "white", 0, 1, white_pawn_image)
+pawn_2_pos_white = Pawn("pawn", "white", 1, 1, white_pawn_image)
+pawn_3_pos_white = Pawn("pawn", "white", 2, 1, white_pawn_image)
+pawn_4_pos_white = Pawn("pawn", "white", 3, 1, white_pawn_image)
+pawn_5_pos_white = Pawn("pawn", "white", 4, 1, white_pawn_image)
+pawn_6_pos_white = Pawn("pawn", "white", 5, 1, white_pawn_image)
+pawn_7_pos_white = Pawn("pawn", "white", 6, 1, white_pawn_image)
+pawn_8_pos_white = Pawn("pawn", "white", 7, 1, white_pawn_image)
+knight_1_pos_white = Knight("knight", "white", 1, 0, white_knight_image)
+knight_2_pos_white = Knight("knight", "white", 6, 0, white_knight_image)
+bishop_1_pos_white = Bishop("bishop", "white", 2, 0, white_bishop_image)
+bishop_2_pos_white = Bishop("bishop", "white", 5, 0, white_bishop_image)
+rook_1_pos_white = Rook("rook", "white", 0, 0, white_rook_image)
+rook_2_pos_white = Rook("rook", "white", 7, 0, white_rook_image)
+queen_pos_white = Queen("queen", "white", 3, 0, white_queen_image)
+king_pos_white = King("king", "white", 4, 0, white_king_image)
 
-pawn_1_pos_black = Pawn("pawn", "black", 0, 6)
-pawn_2_pos_black = Pawn("pawn", "black", 1, 6)
-pawn_3_pos_black = Pawn("pawn", "black", 2, 6)
-pawn_4_pos_black = Pawn("pawn", "black", 3, 6)
-pawn_5_pos_black = Pawn("pawn", "black", 4, 6)
-pawn_6_pos_black = Pawn("pawn", "black", 5, 6)
-pawn_7_pos_black = Pawn("pawn", "black", 6, 6)
-pawn_8_pos_black = Pawn("pawn", "black", 7, 6)
-knight_1_pos_black = Knight("knight", "black", 1, 7)
-knight_2_pos_black = Knight("knight", "black", 6, 7)
-bishop_1_pos_black = Bishop("bishop", "black", 2, 7)
-bishop_2_pos_black = Bishop("bishop", "black", 5, 7)
-rook_1_pos_black = Rook("rook", "black", 0, 7)
-rook_2_pos_black = Rook("rook", "black", 7, 7)
-queen_pos_black = Queen("queen", "black", 3, 7)
-king_pos_black = King("king", "black", 4, 7)
+pawn_1_pos_black = Pawn("pawn", "black", 0, 6, black_pawn_image)
+pawn_2_pos_black = Pawn("pawn", "black", 1, 6, black_pawn_image)
+pawn_3_pos_black = Pawn("pawn", "black", 2, 6, black_pawn_image)
+pawn_4_pos_black = Pawn("pawn", "black", 3, 6, black_pawn_image)
+pawn_5_pos_black = Pawn("pawn", "black", 4, 6, black_pawn_image)
+pawn_6_pos_black = Pawn("pawn", "black", 5, 6, black_pawn_image)
+pawn_7_pos_black = Pawn("pawn", "black", 6, 6, black_pawn_image)
+pawn_8_pos_black = Pawn("pawn", "black", 7, 6, black_pawn_image)
+knight_1_pos_black = Knight("knight", "black", 1, 7, black_knight_image)
+knight_2_pos_black = Knight("knight", "black", 6, 7, black_knight_image)
+bishop_1_pos_black = Bishop("bishop", "black", 2, 7, black_bishop_image)
+bishop_2_pos_black = Bishop("bishop", "black", 5, 7, black_bishop_image)
+rook_1_pos_black = Rook("rook", "black", 0, 7, black_rook_image)
+rook_2_pos_black = Rook("rook", "black", 7, 7, black_rook_image)
+queen_pos_black = Queen("queen", "black", 3, 7, black_queen_image)
+king_pos_black = King("king", "black", 4, 7, black_king_image)
 current_piece = (None, None, None, None, None)
 
 
@@ -357,27 +328,69 @@ for figure in white_figures:
 for figure in black_figures:
     chess_board[figure.coordinate_x][figure.coordinate_y] = figure
 
+
+
+class Game(Chess_piece):
+    @staticmethod
+    def start_game(new_coordinate_x, new_coordinate_y, coordinate_x, coordinate_y):
+        now_piece = chess_board[coordinate_x][coordinate_y]
+        if isinstance(now_piece, Pawn):
+            if now_piece.move(new_coordinate_x, new_coordinate_y):
+                chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
+                chess_board[new_coordinate_x][new_coordinate_y] = now_piece
+                chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x, coordinate_y, None)
+        elif isinstance(now_piece, Knight):
+            if now_piece.move(new_coordinate_x, new_coordinate_y):
+                chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
+                chess_board[new_coordinate_x][new_coordinate_y] = now_piece
+                chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x, coordinate_y, None)
+        elif isinstance(now_piece, Bishop):
+            if now_piece.move(new_coordinate_x, new_coordinate_y):
+                chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
+                chess_board[new_coordinate_x][new_coordinate_y] = now_piece
+                chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x, coordinate_y, None)
+        elif isinstance(now_piece, Rook):
+            if now_piece.move(new_coordinate_x, new_coordinate_y):
+                chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
+                chess_board[new_coordinate_x][new_coordinate_y] = now_piece
+                chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x, coordinate_y, None)
+        elif isinstance(now_piece, Queen):
+            if now_piece.move(new_coordinate_x, new_coordinate_y):
+                chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
+                chess_board[new_coordinate_x][new_coordinate_y] = now_piece
+                chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x,  coordinate_y, None)
+        elif isinstance(now_piece, King):
+            if now_piece.move(new_coordinate_x, new_coordinate_y):
+                chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
+                chess_board[new_coordinate_x][new_coordinate_y] = now_piece
+                chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x,  coordinate_y, None)
+        else:
+            print("Not find")
+
+
 running = True
 board()
 pygame.display.update()
-
+click_counter = 0
 
 while running:
     board()
     pygame.display.update()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RETURN:
-    #  ввод координат
-                print("Ввод")
-                now_coordinate_x, now_coordinate_y = map(int, input().split())
-                next_coordinate_x, next_coordinate_y = map(int, input().split())
-                now_piece = Game(next_coordinate_x, next_coordinate_y, now_coordinate_x, now_coordinate_y)
-                now_piece.start_game(next_coordinate_x, next_coordinate_y, now_coordinate_x, now_coordinate_y)
-                end_of_game = now_piece.mat
-
+        elif event.type == pygame.MOUSEBUTTONDOWN and click_counter == 0:
+            if event.button == (1):
+                click_counter = 1
+                now_row, now_col = get_cell(*pygame.mouse.get_pos())
+        elif event.type == pygame.MOUSEBUTTONDOWN and click_counter == 1:        
+            if event.button == (1):
+                new_row, new_col = get_cell(*pygame.mouse.get_pos())
+                Game.start_game(int(new_row), int(new_col), int(now_row), int(now_col))
+                click_counter = 0
+                # end_of_game = now_piece.mat
+        
 
 print("Game Over")       
