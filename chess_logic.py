@@ -32,17 +32,26 @@ class Chess_piece:
     @staticmethod
     #  препятствия на пути
     def way(coordinate_x, coordinate_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
-        way_x = coordinate_x
-        way_y = coordinate_y
-        while (way_x != new_coordinate_x) or (way_y != new_coordinate_y):
-            if chess_board[way_x + direction_x][way_y + direction_y].piece == "_":
-                way_x += direction_x
-                way_y += direction_y
-            else:
-                print("False  def way")
-                return False
-        return True
-
+        way_x = coordinate_x + direction_x
+        way_y = coordinate_y + direction_y
+        if direction_x == 0 or direction_y == 0:
+            while way_x != new_coordinate_x or way_y != new_coordinate_y:
+                if chess_board[way_x][way_y].piece == "_":
+                    way_x += direction_x
+                    way_y += direction_y
+                else:
+                    print("False  def way horizontal vertical movement")
+                    return False
+            return True
+        else:
+            while (way_x != new_coordinate_x) or (way_y != new_coordinate_y):
+                if chess_board[way_x][way_y].piece == "_":
+                    way_x += direction_x
+                    way_y += direction_y
+                else:
+                    print("False  def way diagonal movement")
+                    return False
+            return True
 
 class Pawn(Chess_piece):  # пешка
     def move(self, new_coordinate_x, new_coordinate_y):
@@ -94,23 +103,26 @@ class Knight(Chess_piece):  # конь
                 return True
             else:
                 return False
-
+        else:
+            return False
+        
 
 class Bishop(Chess_piece):  # слон
     def move(self, new_coordinate_x, new_coordinate_y):
         print("Inside Bishop move method")
         self.new_coordinate_x = new_coordinate_x
         self.new_coordinate_y = new_coordinate_y
-        direction_x = int((new_coordinate_x - self.coordinate_x) / abs(new_coordinate_x - self.coordinate_x))
-        direction_y = int((new_coordinate_y - self.coordinate_y) / abs(new_coordinate_x - self.coordinate_x))
         if self.cheking_position(new_coordinate_x, new_coordinate_y):
             # проверка движения по диагонали
             if abs(new_coordinate_x - self.coordinate_x) == abs(new_coordinate_y - self.coordinate_y):
+                direction_x = int((new_coordinate_x - self.coordinate_x) / abs(new_coordinate_x - self.coordinate_x))
+                direction_y = int((new_coordinate_y - self.coordinate_y) / abs(new_coordinate_x - self.coordinate_x))
                 if self.way(self.coordinate_x, self.coordinate_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
                     self.coordinate_x = new_coordinate_x
                     self.coordinate_y = new_coordinate_y
                     return True
-            return False
+            else:
+                return False
         else:
             return False
 
@@ -157,33 +169,33 @@ class Queen(Chess_piece):
         print("Inside Queen move method")
         self.new_coordinate_x = new_coordinate_x
         self.new_coordinate_y = new_coordinate_y
-        way_x = self.coordinate_x
-        way_y = self.coordinate_y
         direction_x = new_coordinate_x - self.coordinate_x
         direction_y = new_coordinate_y - self.coordinate_y
-        if self.cheking_position(new_coordinate_x, new_coordinate_y):
             # проверка движения по диагонали
-            if abs(new_coordinate_x - self.coordinate_x) == abs(new_coordinate_y - self.coordinate_y):
-                if self.way(way_x, way_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
-                    self.coordinate_x = new_coordinate_x
-                    self.coordinate_y = new_coordinate_y
+        if abs(new_coordinate_x - self.coordinate_x) == abs(new_coordinate_y - self.coordinate_y):
+            direction_x = int((new_coordinate_x - self.coordinate_x) / abs(new_coordinate_x - self.coordinate_x))
+            direction_y = int((new_coordinate_y - self.coordinate_y) / abs(new_coordinate_x - self.coordinate_x))
+            if self.way(self.coordinate_x, self.coordinate_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
+                self.coordinate_x = new_coordinate_x
+                self.coordinate_y = new_coordinate_y
                 return True
-            # проверка на движение только по вертикали
-            elif (new_coordinate_x - self.coordinate_x == 0) and (new_coordinate_y - self.coordinate_y != 0):
-                if self.way(way_x, way_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
-                    self.coordinate_x = new_coordinate_x
-                    self.coordinate_y = new_coordinate_y
+        # проверка на движение только по вертикали
+        elif (new_coordinate_x - self.coordinate_x == 0) and (new_coordinate_y - self.coordinate_y != 0):
+            direction_y = int(direction_y / abs(direction_y))
+            if self.way(self.coordinate_x, self.coordinate_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
+                self.coordinate_x = new_coordinate_x
+                self.coordinate_y = new_coordinate_y
                 return True
-            # проверка на движение только по горизонтали
-            elif (new_coordinate_x - self.coordinate_x != 0) and (new_coordinate_y - self.coordinate_y == 0):
-                if self.way(way_x, way_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
-                    self.coordinate_x = new_coordinate_x
-                    self.coordinate_y = new_coordinate_y
-                    return True
-            else:
-                return False
+        # проверка на движение только по горизонтали
+        elif (new_coordinate_x - self.coordinate_x != 0) and (new_coordinate_y - self.coordinate_y == 0):
+            direction_x = int(direction_x / abs(direction_x))
+            if self.way(self.coordinate_x, self.coordinate_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
+                self.coordinate_x = new_coordinate_x
+                self.coordinate_y = new_coordinate_y
+                return True
         else:
             return False
+   
 
 
 class King(Chess_piece):
