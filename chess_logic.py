@@ -3,6 +3,7 @@ import pygame
 
 pygame.init()
 
+  
 
 class Chess_piece:
     def __init__(self, piece, color, coordinate_x, coordinate_y, image):
@@ -15,7 +16,7 @@ class Chess_piece:
         self.new_coordinate_y = None
         self.mat = 0
      
-    def cheking_position(self, new_coordinate_x, new_coordinate_y):  # проверка выхода за границы доски
+    def cheking_position(self, new_coordinate_x, new_coordinate_y):  # checking for board boundaries
         if not (0 <= new_coordinate_y <= 7) and not (0 <= new_coordinate_x <= 7):
             print("False  cheking_position (0 <=  <= 7)")
             return False
@@ -30,7 +31,7 @@ class Chess_piece:
             return True
 
     @staticmethod
-    #  препятствия на пути
+    #  obstacles on the way
     def way(coordinate_x, coordinate_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
         way_x = coordinate_x + direction_x
         way_y = coordinate_y + direction_y
@@ -53,7 +54,7 @@ class Chess_piece:
                     return False
             return True
 
-class Pawn(Chess_piece):  # пешка
+class Pawn(Chess_piece):
     def move(self, new_coordinate_x, new_coordinate_y):
         print("Inside Pawn move method")
         self.new_coordinate_x = new_coordinate_x
@@ -72,12 +73,12 @@ class Pawn(Chess_piece):  # пешка
             self.coordinate_x = new_coordinate_x
             self.coordinate_y = new_coordinate_y
             return True
-        # проверка на направление и пустую клетку
+        # direction and empty cell checking
         elif (new_coordinate_y - self.coordinate_y == direction) and (chess_board[new_coordinate_x][new_coordinate_y].piece == "_"):
             self.coordinate_x = new_coordinate_x
             self.coordinate_y = new_coordinate_y
             return True
-        # поедание фигуры на искосок
+        # diagonal capture
         elif self.cheking_position(new_coordinate_x, new_coordinate_y) and (abs(new_coordinate_x - self.coordinate_x) == 1):
             self.coordinate_x = new_coordinate_x
             self.coordinate_y = new_coordinate_y
@@ -86,13 +87,13 @@ class Pawn(Chess_piece):  # пешка
             return False
 
 
-class Knight(Chess_piece):  # конь
+class Knight(Chess_piece):
     def move(self, new_coordinate_x, new_coordinate_y):
         print("Inside Knight move method")
         self.new_coordinate_x = new_coordinate_x
         self.new_coordinate_y = new_coordinate_y
         if self.cheking_position(new_coordinate_x, new_coordinate_y):
-            # проверка движения буквой Г
+            # L-shape movement check
             if (abs(new_coordinate_y - self.coordinate_y) == 2) and (abs(new_coordinate_x - self.coordinate_x) == 1):
                 self.coordinate_x = new_coordinate_x
                 self.coordinate_y = new_coordinate_y
@@ -107,13 +108,13 @@ class Knight(Chess_piece):  # конь
             return False
         
 
-class Bishop(Chess_piece):  # слон
+class Bishop(Chess_piece): 
     def move(self, new_coordinate_x, new_coordinate_y):
         print("Inside Bishop move method")
         self.new_coordinate_x = new_coordinate_x
         self.new_coordinate_y = new_coordinate_y
         if self.cheking_position(new_coordinate_x, new_coordinate_y):
-            # проверка движения по диагонали
+            # diagonal movement check
             if abs(new_coordinate_x - self.coordinate_x) == abs(new_coordinate_y - self.coordinate_y):
                 direction_x = int((new_coordinate_x - self.coordinate_x) / abs(new_coordinate_x - self.coordinate_x))
                 direction_y = int((new_coordinate_y - self.coordinate_y) / abs(new_coordinate_x - self.coordinate_x))
@@ -127,7 +128,7 @@ class Bishop(Chess_piece):  # слон
             return False
 
 
-class Rook(Chess_piece):  # ладья
+class Rook(Chess_piece):
     def move(self, new_coordinate_x, new_coordinate_y):
         print("Inside Rook move method")
         self.new_coordinate_x = new_coordinate_x
@@ -139,7 +140,7 @@ class Rook(Chess_piece):  # ладья
         else:
             direction_x = int(direction_x / abs(direction_x))
         if self.cheking_position(new_coordinate_x, new_coordinate_y):
-            # проверка на движение только по вертикали
+            # vertical only movement check
             if (new_coordinate_x - self.coordinate_x == 0) and (new_coordinate_y - self.coordinate_y != 0):
                 if self.way(self.coordinate_x, self.coordinate_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
                     self.coordinate_x = new_coordinate_x
@@ -147,7 +148,7 @@ class Rook(Chess_piece):  # ладья
                     return True
                 else:
                     return False
-            # проверка на движение только по горизонтали
+            # пhorizontal only movement check
             elif (new_coordinate_x - self.coordinate_x != 0) and (new_coordinate_y - self.coordinate_y == 0):
                 if self.way(self.coordinate_x, self.coordinate_y, new_coordinate_x, new_coordinate_y, direction_x,  direction_y):
                     self.coordinate_x = new_coordinate_x
@@ -171,7 +172,7 @@ class Queen(Chess_piece):
         self.new_coordinate_y = new_coordinate_y
         direction_x = new_coordinate_x - self.coordinate_x
         direction_y = new_coordinate_y - self.coordinate_y
-            # проверка движения по диагонали
+            # diagonal movement check
         if abs(new_coordinate_x - self.coordinate_x) == abs(new_coordinate_y - self.coordinate_y):
             direction_x = int((new_coordinate_x - self.coordinate_x) / abs(new_coordinate_x - self.coordinate_x))
             direction_y = int((new_coordinate_y - self.coordinate_y) / abs(new_coordinate_x - self.coordinate_x))
@@ -179,14 +180,14 @@ class Queen(Chess_piece):
                 self.coordinate_x = new_coordinate_x
                 self.coordinate_y = new_coordinate_y
                 return True
-        # проверка на движение только по вертикали
+        # vertical only movement check
         elif (new_coordinate_x - self.coordinate_x == 0) and (new_coordinate_y - self.coordinate_y != 0):
             direction_y = int(direction_y / abs(direction_y))
             if self.way(self.coordinate_x, self.coordinate_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
                 self.coordinate_x = new_coordinate_x
                 self.coordinate_y = new_coordinate_y
                 return True
-        # проверка на движение только по горизонтали
+        # horizontal only movement check
         elif (new_coordinate_x - self.coordinate_x != 0) and (new_coordinate_y - self.coordinate_y == 0):
             direction_x = int(direction_x / abs(direction_x))
             if self.way(self.coordinate_x, self.coordinate_y, new_coordinate_x, new_coordinate_y, direction_x, direction_y):
@@ -322,13 +323,13 @@ king_pos_black = King("king", "black", 4, 7, black_king_image)
 current_piece = (None, None, None, None, None)
 
 
-#  список белых фигур
+#  list of white pieces
 white_figures = [pawn_1_pos_white, pawn_2_pos_white, pawn_3_pos_white, pawn_4_pos_white,
                  pawn_5_pos_white, pawn_6_pos_white, pawn_7_pos_white, pawn_8_pos_white, knight_1_pos_white,
                  knight_2_pos_white, bishop_1_pos_white, bishop_2_pos_white, rook_1_pos_white, rook_2_pos_white,
                  queen_pos_white, king_pos_white]
 
-#  список черных фигур
+#  list of black pieces
 black_figures = [pawn_1_pos_black, pawn_2_pos_black, pawn_3_pos_black, pawn_4_pos_black,
                  pawn_5_pos_black, pawn_6_pos_black, pawn_7_pos_black, pawn_8_pos_black, knight_1_pos_black,
                  knight_2_pos_black, bishop_1_pos_black, bishop_2_pos_black, rook_1_pos_black, rook_2_pos_black,
@@ -344,7 +345,7 @@ for figure in black_figures:
 
 class Game(Chess_piece):
     @staticmethod
-    def start_game(new_coordinate_x, new_coordinate_y, coordinate_x, coordinate_y):
+    def game(new_coordinate_x, new_coordinate_y, coordinate_x, coordinate_y):
         now_piece = chess_board[coordinate_x][coordinate_y]
         if isinstance(now_piece, Pawn):
             if now_piece.move(new_coordinate_x, new_coordinate_y):
@@ -378,31 +379,28 @@ class Game(Chess_piece):
                 chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x,  coordinate_y, None)
         else:
             print("Not find")
-
-
-running = True
-board()
-pygame.display.update()
-click_counter = 0
-
-while running:
-    board()
-    pygame.display.update()
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN and click_counter == 0:
-            if event.button == (1):
-                click_counter = 1
-                now_row, now_col = get_cell(*pygame.mouse.get_pos())
-        elif event.type == pygame.MOUSEBUTTONDOWN and click_counter == 1:        
-            if event.button == (1):
-                new_row, new_col = get_cell(*pygame.mouse.get_pos())
-                Game.start_game(int(new_row), int(new_col), int(now_row), int(now_col))
-                click_counter = 0
-                # end_of_game = now_piece.mat
-        
-
-print("Game Over")       
+    def start_match(self):
+        running = True
+        board()
+        pygame.display.update()
+        click_counter = 0
+        while running:
+            board()
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN and click_counter == 0:
+                    if event.button == (1):
+                        click_counter = 1
+                        now_row, now_col = get_cell(*pygame.mouse.get_pos())
+                elif event.type == pygame.MOUSEBUTTONDOWN and click_counter == 1:        
+                    if event.button == (1):
+                        new_row, new_col = get_cell(*pygame.mouse.get_pos())
+                        Game.game(int(new_row), int(new_col), int(now_row), int(now_col))
+                        click_counter = 0
+                    pygame.display.update()  
+                    pygame.display.flip() 
+        print("Game Over")       
+            
