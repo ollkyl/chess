@@ -53,6 +53,13 @@ class Chess_piece:
                     print("False  def way diagonal movement")
                     return False
             return True
+        
+
+# class Mat():
+#     def game_over(self, mat)
+#         self.mat = mat
+
+
 
 class Pawn(Chess_piece):
     def move(self, new_coordinate_x, new_coordinate_y):
@@ -320,7 +327,7 @@ rook_1_pos_black = Rook("rook", "black", 0, 7, black_rook_image)
 rook_2_pos_black = Rook("rook", "black", 7, 7, black_rook_image)
 queen_pos_black = Queen("queen", "black", 3, 7, black_queen_image)
 king_pos_black = King("king", "black", 4, 7, black_king_image)
-current_piece = (None, None, None, None, None)
+current_piece = Chess_piece(None, None, None, None, None)
 
 
 #  list of white pieces
@@ -403,4 +410,5 @@ class Game(Chess_piece):
                     pygame.display.update()  
                     pygame.display.flip() 
         print("Game Over")       
-            
+
+Game.start_match(None)       
