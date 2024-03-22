@@ -63,7 +63,6 @@ def start_logic(color_of_board, value_music):
 
     class Pawn(Chess_piece):
         def move(self, new_coordinate_x, new_coordinate_y):
-            print("Inside Pawn move method")
             self.new_coordinate_x = new_coordinate_x
             self.new_coordinate_y = new_coordinate_y
             if self.color == "white":
@@ -76,17 +75,19 @@ def start_logic(color_of_board, value_music):
                 return False
             if not (0 <= new_coordinate_y <= 7):
                 return False
-            if new_coordinate_y == start_side + 2 * direction:
+            if (new_coordinate_y == start_side + 2 * direction) and (new_coordinate_x - self.coordinate_x == 0):
                 self.coordinate_x = new_coordinate_x
                 self.coordinate_y = new_coordinate_y
                 return True
             # direction and empty cell checking
-            elif (new_coordinate_y - self.coordinate_y == direction) and (chess_board[new_coordinate_x][new_coordinate_y].piece == "_"):
-                self.coordinate_x = new_coordinate_x
-                self.coordinate_y = new_coordinate_y
-                return True
+            elif (new_coordinate_y - self.coordinate_y == direction) and (new_coordinate_x - self.coordinate_x == 0):
+                if (chess_board[new_coordinate_x][new_coordinate_y].piece == "_"):
+                    self.coordinate_x = new_coordinate_x
+                    self.coordinate_y = new_coordinate_y
+                    return True
+                else:
+                    False
             # diagonal capture
-            #TODO не корректно работает, ходит пустые клетки
             elif (abs(new_coordinate_x - self.coordinate_x) == 1) and (abs(new_coordinate_y - self.coordinate_y) == 1):
                 target_piece = chess_board[new_coordinate_x][new_coordinate_y]
                 if target_piece.piece != "_" and target_piece.color != self.color:
@@ -101,7 +102,6 @@ def start_logic(color_of_board, value_music):
 
     class Knight(Chess_piece):
         def move(self, new_coordinate_x, new_coordinate_y):
-            print("Inside Knight move method")
             self.new_coordinate_x = new_coordinate_x
             self.new_coordinate_y = new_coordinate_y
             if self.cheking_position(new_coordinate_x, new_coordinate_y):
@@ -122,7 +122,6 @@ def start_logic(color_of_board, value_music):
 
     class Bishop(Chess_piece): 
         def move(self, new_coordinate_x, new_coordinate_y):
-            print("Inside Bishop move method")
             self.new_coordinate_x = new_coordinate_x
             self.new_coordinate_y = new_coordinate_y
             if self.cheking_position(new_coordinate_x, new_coordinate_y):
@@ -142,7 +141,6 @@ def start_logic(color_of_board, value_music):
 
     class Rook(Chess_piece):
         def move(self, new_coordinate_x, new_coordinate_y):
-            print("Inside Rook move method")
             self.new_coordinate_x = new_coordinate_x
             self.new_coordinate_y = new_coordinate_y
             direction_x = new_coordinate_x - self.coordinate_x
@@ -179,7 +177,6 @@ def start_logic(color_of_board, value_music):
 
     class Queen(Chess_piece):
         def move(self, new_coordinate_x, new_coordinate_y):
-            print("Inside Queen move method")
             self.new_coordinate_x = new_coordinate_x
             self.new_coordinate_y = new_coordinate_y
             direction_x = new_coordinate_x - self.coordinate_x
@@ -215,7 +212,6 @@ def start_logic(color_of_board, value_music):
 
     class King(Chess_piece):
         def move(self, new_coordinate_x, new_coordinate_y):
-            print("Inside King move method")
             self.new_coordinate_x = new_coordinate_x
             self.new_coordinate_y = new_coordinate_y
             if self.cheking_position(new_coordinate_x, new_coordinate_y):
@@ -291,7 +287,6 @@ def start_logic(color_of_board, value_music):
         return row, col
 
     def end_game():
-            print("inside end_game")
             end_mat = pygame.Surface((400, 200))
             text_mat = font_1.render("MAT", False, 'Red')
             screen.blit(end_mat, (200, 300))
@@ -382,42 +377,57 @@ def start_logic(color_of_board, value_music):
 
     class Game(Chess_piece):
         @staticmethod
-        def game(new_coordinate_x, new_coordinate_y, coordinate_x, coordinate_y):
+        def game(new_coordinate_x, new_coordinate_y, coordinate_x, coordinate_y, color):
             now_piece = chess_board[coordinate_x][coordinate_y]
-            if isinstance(now_piece, Pawn):
-                if now_piece.move(new_coordinate_x, new_coordinate_y):
-                    chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
-                    chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                    chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x, coordinate_y, None, 0)
-            elif isinstance(now_piece, Knight):
-                if now_piece.move(new_coordinate_x, new_coordinate_y):
-                    chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
-                    chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                    chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x, coordinate_y, None, 0)
-            elif isinstance(now_piece, Bishop):
-                if now_piece.move(new_coordinate_x, new_coordinate_y):
-                    chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
-                    chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                    chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x, coordinate_y, None, 0)
-            elif isinstance(now_piece, Rook):
-                if now_piece.move(new_coordinate_x, new_coordinate_y):
-                    chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
-                    chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                    chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x, coordinate_y, None, 0)
-            elif isinstance(now_piece, Queen):
-                if now_piece.move(new_coordinate_x, new_coordinate_y):
-                    chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
-                    chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                    chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x,  coordinate_y, None, 0)
-            elif isinstance(now_piece, King):
-                if now_piece.move(new_coordinate_x, new_coordinate_y):
-                    chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
-                    chess_board[new_coordinate_x][new_coordinate_y] = now_piece
-                    chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x,  coordinate_y, None, 0)
+            print("Chosen ", now_piece.color, "Turn ", color)
+            if now_piece.color == color:
+                if isinstance(now_piece, Pawn):
+                    if now_piece.move(new_coordinate_x, new_coordinate_y):
+                        chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
+                        chess_board[new_coordinate_x][new_coordinate_y] = now_piece
+                        chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x, coordinate_y, None, 0)
+                        return True
+                elif isinstance(now_piece, Knight):
+                    if now_piece.move(new_coordinate_x, new_coordinate_y):
+                        chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
+                        chess_board[new_coordinate_x][new_coordinate_y] = now_piece
+                        chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x, coordinate_y, None, 0)
+                        return True
+                elif isinstance(now_piece, Bishop):
+                    if now_piece.move(new_coordinate_x, new_coordinate_y):
+                        chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
+                        chess_board[new_coordinate_x][new_coordinate_y] = now_piece
+                        chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x, coordinate_y, None, 0)
+                        return True
+                elif isinstance(now_piece, Rook):
+                    if now_piece.move(new_coordinate_x, new_coordinate_y):
+                        chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
+                        chess_board[new_coordinate_x][new_coordinate_y] = now_piece
+                        chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x, coordinate_y, None, 0)
+                        return True
+                elif isinstance(now_piece, Queen):
+                    if now_piece.move(new_coordinate_x, new_coordinate_y):
+                        chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
+                        chess_board[new_coordinate_x][new_coordinate_y] = now_piece
+                        chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x,  coordinate_y, None, 0)
+                        return True
+                elif isinstance(now_piece, King):
+                    if now_piece.move(new_coordinate_x, new_coordinate_y):
+                        chess_board[new_coordinate_x][new_coordinate_y].image = pygame.Surface((0, 0))
+                        chess_board[new_coordinate_x][new_coordinate_y] = now_piece
+                        chess_board[coordinate_x][coordinate_y] = Chess_piece('_', '_', coordinate_x,  coordinate_y, None, 0)
+                        return True
+                else:
+                    print("Not find")
+                    return False
             else:
-                print("Not find")
-        def start_match(color_of_board, value_music):
+                print("False turn")
+                return False
+            
 
+        def start_match(color_of_board, value_music):
+            global color
+            color = 'white'
             global running
             running = True
             board(color_of_board)
@@ -438,15 +448,14 @@ def start_logic(color_of_board, value_music):
                     elif event.type == pygame.MOUSEBUTTONDOWN and click_counter == 1:        
                         if event.button == (1):
                             new_row, new_col = get_cell(*pygame.mouse.get_pos())
-                            Game.game(int(new_row), int(new_col), int(now_row), int(now_col))
                             click_counter = 0
+                            if Game.game(int(new_row), int(new_col), int(now_row), int(now_col), color): 
+                                if color == 'white':
+                                    color = 'black'
+                                else:
+                                    color = 'white'
                         pygame.display.update()  
                         pygame.display.flip() 
+                        
             print("Game Over") 
     Game.start_match(color_of_board, value_music)  
-
-
-# if __name__ == "__main__": 
-#     color_of_board, value_music = None, None  
-#     start_logic(color_of_board, value_music) 
-          

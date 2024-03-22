@@ -1,9 +1,3 @@
- #Settings.py
-
-# def start_settings():
-#     pass
-
-
 def start_settings():
 
     import pygame
@@ -136,7 +130,6 @@ def start_settings():
                 elif event.type == pygame.MOUSEBUTTONDOWN:        
                     if event.button == (1):  #back
                         if button_1_rect.collidepoint(pygame.mouse.get_pos()):
-                            print("menu")
                             running = False
                         elif button_2_rect.collidepoint(pygame.mouse.get_pos()):
                             print("apply") 
@@ -154,19 +147,15 @@ def start_settings():
                             print("sound")
                         #TODO sound
                         elif button_5_rect.collidepoint(pygame.mouse.get_pos()): 
-                            print("purple")
                             color_of_board = purple
                             color_of_board_settings = purple
                         elif button_6_rect.collidepoint(pygame.mouse.get_pos()):
-                            print("green")
                             color_of_board_settings = green
                             color_of_board = green
                         elif button_7_rect.collidepoint(pygame.mouse.get_pos()):
-                            print("black")
                             color_of_board_settings = black
                             color_of_board = black
                         elif button_8_rect.collidepoint(pygame.mouse.get_pos()):
-                            print("wood")  
                             color_of_board_settings = wood
                             color_of_board = 11
                         elif button_9_rect.collidepoint(pygame.mouse.get_pos()):
