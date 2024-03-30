@@ -1,7 +1,8 @@
-def start_settings():
+import pygame
 
-    import pygame
-    
+from . import constants
+
+def start_settings():
     pygame.mixer.init()
     pygame.init()
 
@@ -9,15 +10,15 @@ def start_settings():
     # icon = pygame.image.load('images/icon.png')
     button_1 = pygame.Surface((160,  40))
     button_2 = pygame.Surface((16,  16))
-    font_1 = pygame.font.Font('fonts/mokoto.ttf', 22)
-    font_2 = pygame.font.Font('fonts/mokoto2.ttf', 16)
+    font_1 = pygame.font.Font(constants.FONT_MOKOTO, 22)
+    font_2 = pygame.font.Font(constants.FONT_MOKOTO2, 16)
     square = 35
     white = (250, 250, 250)
     black = (100, 100, 100)
     green = (46, 139, 87)
     purple = (109, 70, 166)
-    wood = pygame.image.load('images/wood_settings.jpg')
-    pygame.mixer.music.load('chess_music.mp3')
+    wood = pygame.image.load(constants.IMG_WOOD_SETTINGS)
+    pygame.mixer.music.load(constants.MUSIC_CHESS)
     pygame.mixer.music.play(-1)
   
 

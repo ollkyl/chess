@@ -1,7 +1,10 @@
 # chess_menu.py
+import pygame
+
+from . import constants
+
 def menu():
    
-    import pygame
 
     pygame.init()
     #menu
@@ -9,7 +12,7 @@ def menu():
     screen = pygame.display.set_mode((800, 800))
     # icon = pygame.image.load('images/icon.png')
     button = pygame.Surface((300, 50))
-    font_1 = pygame.font.Font('fonts/mokoto.ttf', 26)
+    font_1 = pygame.font.Font(constants.FONT_MOKOTO, 26)
     text_button_1 = font_1.render("START GAME", True, (75, 0, 130) )
     text_button_2 = font_1.render("SETTINGS", True, (75, 0, 130))
     text_button_3 = font_1.render("EXIT", True, (75, 0, 130))
