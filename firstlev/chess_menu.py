@@ -7,7 +7,7 @@ def menu():
     #menu
 
     screen = pygame.display.set_mode((800, 800))
-    icon = pygame.image.load('images/chess_icon.png')
+    # icon = pygame.image.load('images/icon.png')
     button = pygame.Surface((300, 50))
     font_1 = pygame.font.Font('fonts/mokoto.ttf', 26)
     text_button_1 = font_1.render("START GAME", True, (75, 0, 130) )
@@ -18,7 +18,7 @@ def menu():
     button_2_rect = pygame.Rect(300, 350, 300, 50)
     button_3_rect = pygame.Rect(300, 450, 300, 50)
     pygame.display.set_caption("Chess by Ollkyl")
-    pygame.display.set_icon(icon)
+    # pygame.display.set_icon(icon)
     button.fill((123, 104, 238))
     screen.fill((10, 32, 73))
     running = True

@@ -6,13 +6,13 @@ def start_settings():
     pygame.init()
 
     screen = pygame.display.set_mode((800, 800))
-    icon = pygame.image.load('images/chess_icon.png')
+    # icon = pygame.image.load('images/icon.png')
     button_1 = pygame.Surface((160,  40))
     button_2 = pygame.Surface((16,  16))
     font_1 = pygame.font.Font('fonts/mokoto.ttf', 22)
     font_2 = pygame.font.Font('fonts/mokoto2.ttf', 16)
     square = 35
-    white = (250, 250, 250)
+    white = (250, 250, 250)pyinstaller --onedir main.py firstlev\chess_logic.py firstlev\chess_menu.py __init__.py settings\Settings.py settings\__init__.py --add-binary "C:\Users\Olga\Documents\programming\chess\.venv\Lib\site-packages\pygame:pygame" --add-data "images\bishopblack.png:images" --add-data "images\bishopwhite.png:images" --add-data "images\icon.png:images" --add-data "images\kingblack.png:images" --add-data "images\kingwhite.png:images" --add-data "images\knightblack.png:images" --add-data "images\knightwhite.png:images" --add-data "images\pawnblack.png:images" --add-data "images\pawnwhite.png:images" --add-data "images\queenblack.png:images" --add-data "images\queenwhite.png:images" --add-data "images\rookblack.png:images" --add-data "images\rookwhite.png:images" --add-data "images\wood_settings.jpg:images" --add-data "images\wood.jpg:images" --add-data "fonts\mokoto.ttf:font" --add-data "fonts\mokoto2.ttf:font" --add-data "chess_music.mp3:." --add-data "images\icon.png:images" --additional-hooks-dir ./pyinstaller-hooks
     black = (100, 100, 100)
     green = (46, 139, 87)
     purple = (109, 70, 166)
@@ -67,7 +67,7 @@ def start_settings():
     button_10_rect = pygame.Rect(280, 450, 16, 16)
 
     pygame.display.set_caption("Chess by Ollkyl")
-    pygame.display.set_icon(icon)
+    # pygame.display.set_icon(icon)
     button_1.fill((147, 112, 219))
     button_2.fill((147, 112, 219))
 
