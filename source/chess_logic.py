@@ -1,13 +1,14 @@
 # chess_logic.py
+import time
+import pygame
 
-
+from . import constants
 
 def start_logic(color_of_board, value_music):
-    import time
-    import pygame
+    
     pygame.mixer.init()
     pygame.init()
-    font_1 = pygame.font.Font('fonts/mokoto.ttf', 60)
+    font_1 = pygame.font.Font(constants.FONT_MOKOTO, 60)
 
 
     
@@ -227,14 +228,14 @@ def start_logic(color_of_board, value_music):
     
     def music(value_music):
             if value_music == 1:
-                pygame.mixer.music.load('chess_music.mp3')
+                pygame.mixer.music.load(constants.MUSIC_CHESS)
                 pygame.mixer.music.play(-1)
             else:
                 pygame.mixer.music.pause()
 
         
     chess_board = [[Chess_piece('_', '_', -1, -1, None, 0) for _ in range(8)] for _ in range(8)]
-    wood = pygame.image.load('images/wood.jpg')
+    wood = pygame.image.load(constants.IMG_WOOD)
 
     def board(color_of_board):
         if color_of_board == 11:
@@ -305,18 +306,18 @@ def start_logic(color_of_board, value_music):
     white = (255, 255, 255)
     square = 100
 
-    white_pawn_image = pygame.image.load("images/pawnwhite.png")
-    black_pawn_image = pygame.image.load("images/pawnblack.png")
-    white_knight_image = pygame.image.load("images/knightwhite.png")
-    black_knight_image = pygame.image.load("images/knightblack.png")
-    white_bishop_image = pygame.image.load("images/bishopwhite.png")
-    black_bishop_image = pygame.image.load("images/bishopblack.png")
-    white_rook_image = pygame.image.load("images/rookwhite.png")
-    black_rook_image = pygame.image.load("images/rookblack.png")
-    white_queen_image = pygame.image.load("images/queenwhite.png")
-    black_queen_image = pygame.image.load("images/queenblack.png")
-    white_king_image = pygame.image.load("images/kingwhite.png")
-    black_king_image = pygame.image.load("images/kingblack.png")
+    white_pawn_image = pygame.image.load(constants.IMG_PAWN_WHITE)
+    black_pawn_image = pygame.image.load(constants.IMG_PAWN_BLACK)
+    white_knight_image = pygame.image.load(constants.IMG_KNIGHT_WHITE)
+    black_knight_image = pygame.image.load(constants.IMG_KNIGHT_BLACK)
+    white_bishop_image = pygame.image.load(constants.IMG_BISHOP_WHITE)
+    black_bishop_image = pygame.image.load(constants.IMG_BISHOP_BLACK)
+    white_rook_image = pygame.image.load(constants.IMG_ROOK_WHITE)
+    black_rook_image = pygame.image.load(constants.IMG_ROOK_BLACK)
+    white_queen_image = pygame.image.load(constants.IMG_QUEEN_WHITE)
+    black_queen_image = pygame.image.load(constants.IMG_QUEEN_BLACK)
+    white_king_image = pygame.image.load(constants.IMG_KING_WHITE)
+    black_king_image = pygame.image.load(constants.IMG_KING_BLACK)
 
 
     pawn_1_pos_white = Pawn("pawn", "white", 0, 1, white_pawn_image, 0)
