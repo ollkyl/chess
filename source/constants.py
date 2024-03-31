@@ -1,7 +1,17 @@
 import os
+import sys
+
+def getcwd():
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return base_path
 
 #PATHS
-ROOT_DIR = os.getcwd()
+ROOT_DIR = getcwd()
 RESOURCES_DIR = os.path.join(ROOT_DIR, 'resources')
 FONTS_DIR = os.path.join(RESOURCES_DIR, 'fonts')
 IMAGES_DIR = os.path.join(RESOURCES_DIR, 'images')
