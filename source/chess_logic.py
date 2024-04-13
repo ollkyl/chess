@@ -3,8 +3,8 @@ import time
 import pygame
 
 from . import constants
-
-def start_logic(color_of_board, value_music):
+pygame.init()
+def start_logic(color_of_board):
     
     pygame.mixer.init()
     pygame.init()
@@ -74,27 +74,28 @@ def start_logic(color_of_board, value_music):
                 start_side = 6
             else:
                 return False
-            if not (0 <= new_coordinate_y <= 7):
-                return False
-            if (new_coordinate_y == start_side + 2 * direction) and (new_coordinate_x - self.coordinate_x == 0):
-                self.coordinate_x = new_coordinate_x
-                self.coordinate_y = new_coordinate_y
-                return True
-            # direction and empty cell checking
-            elif (new_coordinate_y - self.coordinate_y == direction) and (new_coordinate_x - self.coordinate_x == 0):
-                if (chess_board[new_coordinate_x][new_coordinate_y].piece == "_"):
+            if self.cheking_position(new_coordinate_x, new_coordinate_y):
+                if (new_coordinate_y == start_side + 2 * direction) and (new_coordinate_x - self.coordinate_x == 0):
                     self.coordinate_x = new_coordinate_x
                     self.coordinate_y = new_coordinate_y
                     return True
-                else:
-                    False
-            # diagonal capture
-            elif (abs(new_coordinate_x - self.coordinate_x) == 1) and (abs(new_coordinate_y - self.coordinate_y) == 1):
-                target_piece = chess_board[new_coordinate_x][new_coordinate_y]
-                if target_piece.piece != "_" and target_piece.color != self.color:
-                    self.coordinate_x = new_coordinate_x
-                    self.coordinate_y = new_coordinate_y
-                    return True
+                # direction and empty cell checking
+                elif (new_coordinate_y - self.coordinate_y == direction) and (new_coordinate_x - self.coordinate_x == 0):
+                    if (chess_board[new_coordinate_x][new_coordinate_y].piece == "_"):
+                        self.coordinate_x = new_coordinate_x
+                        self.coordinate_y = new_coordinate_y
+                        return True
+                    else:
+                        False
+                # diagonal capture
+                elif (abs(new_coordinate_x - self.coordinate_x) == 1) and (abs(new_coordinate_y - self.coordinate_y) == 1):
+                    target_piece = chess_board[new_coordinate_x][new_coordinate_y]
+                    if target_piece.piece != "_" and target_piece.color != self.color:
+                        self.coordinate_x = new_coordinate_x
+                        self.coordinate_y = new_coordinate_y
+                        return True
+                    else:
+                        return False
                 else:
                     return False
             else:
@@ -226,12 +227,12 @@ def start_logic(color_of_board, value_music):
                 return False
             
     
-    def music(value_music):
-            if value_music == 1:
-                pygame.mixer.music.load(constants.MUSIC_CHESS)
-                pygame.mixer.music.play(-1)
-            else:
-                pygame.mixer.music.pause()
+    # def music(value_music):
+    #         if value_music == 1:
+    #             pygame.mixer.music.load(constants.MUSIC_CHESS)
+    #             pygame.mixer.music.play(-1)
+    #         else:
+    #             pygame.mixer.music.pause()
 
         
     chess_board = [[Chess_piece('_', '_', -1, -1, None, 0) for _ in range(8)] for _ in range(8)]
@@ -297,11 +298,17 @@ def start_logic(color_of_board, value_music):
             global running
             running = False
 
+    def selection_highlight(row, col):
+        print("selected")
+        pygame.draw.rect(screen, (165, 42, 42), (row * square, col * square, square, square), 10)
+        pygame.display.update()  
+                    
+
 
     screen = pygame.display.set_mode((800, 800))
     pygame.display.set_caption("Chess by Ollkyl")
-    # icon = pygame.image.load("images/icon.png")
-    # pygame.display.set_icon(icon)
+    icon = pygame.image.load(constants.icon)
+    pygame.display.set_icon(icon)
     screen.fill((143, 109, 88))
     white = (255, 255, 255)
     square = 100
@@ -426,18 +433,17 @@ def start_logic(color_of_board, value_music):
                 return False
             
 
-        def start_match(color_of_board, value_music):
+        def start_match(color_of_board):
             global color
             color = 'white'
             global running
             running = True
             board(color_of_board)
-            music(value_music)
+            # music(value_music)
             pygame.display.update()
             click_counter = 0
             while running:
-                board(color_of_board)
-                pygame.display.update()
+                
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         pygame.quit()
@@ -446,17 +452,20 @@ def start_logic(color_of_board, value_music):
                         if event.button == (1):
                             click_counter = 1
                             now_row, now_col = get_cell(*pygame.mouse.get_pos())
+                            selection_highlight(int(now_row), int(now_col))
+                        pygame.display.update()
                     elif event.type == pygame.MOUSEBUTTONDOWN and click_counter == 1:        
                         if event.button == (1):
                             new_row, new_col = get_cell(*pygame.mouse.get_pos())
                             click_counter = 0
+                            pygame.display.update()
                             if Game.game(int(new_row), int(new_col), int(now_row), int(now_col), color): 
                                 if color == 'white':
                                     color = 'black'
                                 else:
                                     color = 'white'
+                        board(color_of_board)
                         pygame.display.update()  
-                        pygame.display.flip() 
                         
             print("Game Over") 
-    Game.start_match(color_of_board, value_music)  
+    Game.start_match(color_of_board)  

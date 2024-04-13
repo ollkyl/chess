@@ -1,13 +1,14 @@
 import pygame
-
 from . import constants
 
-def start_settings():
+
+def start_settings(value_music):
     pygame.mixer.init()
     pygame.init()
 
     screen = pygame.display.set_mode((800, 800))
-    # icon = pygame.image.load('images/icon.png')
+    icon = pygame.image.load(constants.icon)
+    pygame.display.set_icon(icon)
     button_1 = pygame.Surface((160,  40))
     button_2 = pygame.Surface((16,  16))
     font_1 = pygame.font.Font(constants.FONT_MOKOTO, 22)
@@ -68,7 +69,6 @@ def start_settings():
     button_10_rect = pygame.Rect(280, 450, 16, 16)
 
     pygame.display.set_caption("Chess by Ollkyl")
-    # pygame.display.set_icon(icon)
     button_1.fill((147, 112, 219))
     button_2.fill((147, 112, 219))
 
@@ -83,46 +83,42 @@ def start_settings():
 
 
 
-    def settings():
-        global value_music
-        value_music = None
-        play_music(0)
+    def settings(value_music):
+        play_music(value_music)
         running = True
         screen.fill((10, 32, 73))
         global color_of_board 
-        color_of_board = None
+        color_of_board = (46, 139, 87)
         board_color(green)
         color_of_board_settings = green
+        screen.blit(button_1, (145, 590, 160, 40))
+        screen.blit(button_1, (445, 590, 160, 40))
+        screen.blit(button_2, (280, 80, 16, 16))
+        screen.blit(button_2, (280, 120, 16, 16))
+        screen.blit(button_2, (280, 205, 16, 16))
+        screen.blit(button_2, (280, 245, 16, 16))
+        screen.blit(button_2, (280, 285, 16, 16))
+        screen.blit(button_2, (280, 325, 16, 16))
+        screen.blit(button_2, (280, 405, 16, 16))
+        screen.blit(button_2, (280, 445, 16, 16))
+
+        screen.blit(text_button_music, (90, 80))
+        screen.blit(text_button_sound, (90, 120))
+
+        screen.blit(text_button_color, (40, 165))
+        screen.blit(text_button_purple, (90,205))
+        screen.blit(text_button_green, (90,245))
+        screen.blit(text_button_black, (90,285))
+        screen.blit(text_button_wood, (90,325))
+        
+        screen.blit(text_button_type, (40, 365))
+        screen.blit(text_button_type1, (90,405))
+        screen.blit(text_button_type2, (90,445))
+
+        screen.blit(text_button_apply, (477, 600))
+        screen.blit(text_button_back, (182, 600))        
         while running:
             clock.tick(10)
-            screen.blit(button_1, (145, 590, 160, 40))
-            screen.blit(button_1, (445, 590, 160, 40))
-            screen.blit(button_2, (280, 80, 16, 16))
-            screen.blit(button_2, (280, 120, 16, 16))
-            screen.blit(button_2, (280, 205, 16, 16))
-            screen.blit(button_2, (280, 245, 16, 16))
-            screen.blit(button_2, (280, 285, 16, 16))
-            screen.blit(button_2, (280, 325, 16, 16))
-            screen.blit(button_2, (280, 405, 16, 16))
-            screen.blit(button_2, (280, 445, 16, 16))
-
-            screen.blit(text_button_music, (90, 80))
-            screen.blit(text_button_sound, (90, 120))
-
-            screen.blit(text_button_color, (40, 165))
-            screen.blit(text_button_purple, (90,205))
-            screen.blit(text_button_green, (90,245))
-            screen.blit(text_button_black, (90,285))
-            screen.blit(text_button_wood, (90,325))
-            
-            screen.blit(text_button_type, (40, 365))
-            screen.blit(text_button_type1, (90,405))
-            screen.blit(text_button_type2, (90,445))
-
-            screen.blit(text_button_apply, (477, 600))
-            screen.blit(text_button_back, (182, 600))
-        
-
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -166,8 +162,8 @@ def start_settings():
                     board_color(color_of_board_settings)
                     play_music(value_music)
         return color_of_board, value_music               
-    settings()
+    settings(value_music)
     return color_of_board, value_music 
 if __name__ == "__main__":
-    start_settings()
+    start_settings(value_music)
 

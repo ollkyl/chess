@@ -38,6 +38,7 @@ IMG_QUEEN_WHITE = os.path.join(IMAGES_DIR, 'queenwhite.png')
 IMG_QUEEN_BLACK = os.path.join(IMAGES_DIR, 'queenblack.png')
 IMG_KING_WHITE = os.path.join(IMAGES_DIR, 'kingwhite.png')
 IMG_KING_BLACK = os.path.join(IMAGES_DIR, 'kingblack.png')
+icon = os.path.join(IMAGES_DIR, 'icon.png')
 
 # MUSIC
 MUSIC_CHESS = os.path.join(MUSIC_DIR, 'chess_music.mp3')
