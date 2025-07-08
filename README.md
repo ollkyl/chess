@@ -1,4 +1,4 @@
- # Chess by Ollkyl
+ # Chess 
 
 A simple chess game built with Python and Pygame. Features a main menu, board color selection, music toggle, and .exe builds via PyInstaller.
 ## Run
